@@ -37,6 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="form-connect">
+     <?php include '_header.php';?>
+     <main>
     <form action="/" method="post">
     <h2>Inscription</h2>
     <label for="email">Email</label>
@@ -55,5 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <?php endforeach; ?>    
         </ul>    
     <?php endif; ?>  
+     </main>
+       <?php include '_footer.php';?>
 </body>
 </html>

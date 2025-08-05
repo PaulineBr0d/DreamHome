@@ -1,3 +1,6 @@
+ <?php 
+ session_start();
+ ?>
  <header>
     <h1>Find My Dream Home</h1>
     <nav  class="nav-links">

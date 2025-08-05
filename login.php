@@ -31,7 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Connexion à Find My Dream Home</title>
     <link rel="stylesheet" href="style.css">
 </head>
+ <?php include '_header.php';?>
 <body class="form-connect">
+    <main>
     <form action="/" method="post">
     <h2>Connexion</h2>
     <label for="email">Email</label>
@@ -49,6 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <?php endforeach; ?>    
         </ul>    
     <?php endif; ?> 
+       </main>
+       <?php include '_footer.php';?>
 </body>
 </html>
 
