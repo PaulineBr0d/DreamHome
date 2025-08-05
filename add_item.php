@@ -40,12 +40,20 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <option value="">--Préciser le type de bien svp--</option>
     <option value="apartment">Appartement</option>
     <option value="house">Maison</option>
+    </select>
     <label for="image">Image</label>
     <input type="file" id="image" name="image" accept="image/png, image/jpeg" />
     <label for="price">Prix (en €)</label>
     <input type="number" name="price" id="price" required>
     <label for="location">Ville</label>
     <input type="text" name="location" id="location" required>
+    <select id="transaction-type" name="transaction-type" required>
+    <option value="">--Préciser le type de transaction svp--</option>
+    <option value="sale">Vente</option>
+    <option value="rent">Location</option>
+    </select>
+    <label for="description">Description</label>
+    <textarea id="description" name="description" cols="30" rows="10"></textarea>
     <button type="submit">Ajouter</button></form> 
     </main>
        <?php include '_footer.php';?>
