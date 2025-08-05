@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <input type="password" name="password" id="password" required>
     <label for="confirm-password">Confirmer le mot de passe</label>
     <input type="password" name="confirm-password" id="confirm-password" required>
-    <button type="submit">S'inscrire</button>  
+    <button type="submit">S'inscrire</button></form>   
     <div>Déjà inscrit ? <a href="/login.php">Connectez-vous</div>
      <?php  if (!empty($errors))  : ?>
         <h2>Merci de corriger les erreurs suivantes.</h2>
