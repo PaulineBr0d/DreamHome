@@ -1,12 +1,21 @@
 <?php
+session_start();
+
 $errors = [];
+
 $emailReg = "/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/";
 $pwdReg = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/";
+
+// pour test uniquement
+$utilisateur = [
+    'email' => 'toto@gmail.com',
+];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
     $confirmPassword = trim($_POST['confirm-password']);
+
     if (empty($email)) {
         $errors[] = "L'email'est obligatoire.";
     }  elseif (!preg_match($emailReg, $email)) {
@@ -16,13 +25,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Le mot de passe est obligatoire.";
     }
       if (($password)!==($confirmPassword)) {
-        $errors[] = "Les mot de passe doit strictement les mêmes.";
+        $errors[] = "Les mot de passe doivent être strictement les mêmes.";
     } elseif (!preg_match($pwdReg, $password)) {
         $errors[] = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
     }
 
     if (empty($errors)) {
-        
+          
+            $_SESSION['email'] = $email;
+            $_SESSION['isLoggedIn'] = true;
+
+            header("Location: ????.php");
+            exit;    
     }
 }
 ?>
@@ -39,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body class="form-connect">
      <?php include '_header.php';?>
      <main>
-    <form action="/" method="post">
+    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
     <h2>Inscription</h2>
     <label for="email">Email</label>
     <input type="email" name="email" id="email" required>
@@ -48,12 +62,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <label for="confirm-password">Confirmer le mot de passe</label>
     <input type="password" name="confirm-password" id="confirm-password" required>
     <button type="submit">S'inscrire</button></form>   
-    <div>Déjà inscrit ? <a href="/login.php">Connectez-vous</div>
+    <div>Déjà inscrit ? <a href="/login.php">Connectez-vous</a></div>
      <?php  if (!empty($errors))  : ?>
-        <h2>Merci de corriger les erreurs suivantes.</h2>
-        <ul>
+        <h4>Merci de corriger les erreurs suivantes.</h4>
+        <ul class="erreurs">
            <?php foreach ($errors as $error) : ?>
-            <li><?= error ?></li>
+            <li><?= htmlspecialchars($error) ?></li>
           <?php endforeach; ?>    
         </ul>    
     <?php endif; ?>  

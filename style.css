@@ -21,6 +21,7 @@ body {
 
 header {
     position: sticky;
+    width: 100%;
     top: 0;
     left: 0;
     right: 0;
@@ -96,6 +97,7 @@ nav{
     
 footer {
     background-color: #1e1e2f;
+    width: 100%;
     bottom:0;
     color: white;
     text-align: center;
@@ -159,3 +161,17 @@ div a:hover {
     text-decoration: underline;
 }
 
+ul.erreurs {
+    background-color: #ffe0e0;
+    border: 1px solid #ff4d4d;
+    color: #b30000;
+    padding: 15px 20px;
+    border-radius: 8px;
+    list-style-type: none;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+}
+
+ul.erreurs li {
+    margin: 8px 0;
+}

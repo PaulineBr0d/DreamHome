@@ -92,3 +92,40 @@ Chaque annonce doit contenir :
 - **Aucune mise en base de données pour le moment** : on se concentre sur la structure et la validation visuelle.
 - Vous devez **prévoir un minimum de validation (coté Client)** :
     - Vérifier que tous les champs sont remplis
+
+# #3 Add listing
+
+### **Pages à créer**
+
+### **a) Bouton dans le header**
+
+- Ajouter dans la **barre de navigation** un lien intitulé **Add**
+- Ce lien doit pointer vers un nouveau fichier
+- Le style du bouton doit être cohérent avec les autres liens du menu
+- Le bouton doit rester visible même lors du défilement
+
+---
+
+### **b) Page d’ajout d’annonce**
+
+- Doit contenir :
+    - **Titre**
+    - **Formulaire** avec les champs :
+        - **Image**
+        - **Titre**
+        - **Prix**
+        - **Ville**
+        - **Description courte**
+        - **Type** *(Rent / Sale)*
+        - **Bouton “Enregistrer”**
+    - Un lien **“Retour à l’accueil”** sous le formulaire
+
+---
+
+### **3. Contraintes techniques**
+
+- Le formulaire doit être en **méthode POST**.
+- Tous les champs sont **obligatoires**.
+- **Aucune sauvegarde réelle** pour le moment (pas d’écriture en base de données) :
+    - Afficher simplement un message de confirmation après soumission.
+- Validation côté client & côté serveur
