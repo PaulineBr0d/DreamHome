@@ -1,18 +1,24 @@
 <?php
 $errors = [];
-
+$emailReg = "/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/";
+$pwdReg = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
     if (empty($email)) {
         $errors[] = "L'email'est obligatoire.";
+    }  elseif (!preg_match($emailReg, $email)) {
+        $errors[] = "Format de l'email invalide.";
     }
+
     if (empty($password)) {
         $errors[] = "Le mot de passe est obligatoire.";
+    } elseif (!preg_match($pwdReg, $password)) {
+        $errors[] = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
     }
 
     if (empty($errors)) {
-        
+
     }
 }
 ?>
