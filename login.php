@@ -41,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <label for="password">Mot de passe</label>
     <input type="password" name="password" id="password" required>
     <button type="submit">Se connecter</button>  
-    <div>
     <div>Pas encore de compte ? <a href="/register.php">Inscrivez-vous</div>
     <?php  if (!empty($errors))  : ?>
         <h2>Merci de corriger les erreurs suivantes.</h2>
