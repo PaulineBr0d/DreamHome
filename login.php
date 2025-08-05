@@ -1,3 +1,22 @@
+<?php
+$errors = [];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+    if (empty($email)) {
+        $errors[] = "L'email'est obligatoire.";
+    }
+    if (empty($password)) {
+        $errors[] = "Le mot de passe est obligatoire.";
+    }
+
+    if (empty($errors)) {
+        
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +34,15 @@
     <input type="password" name="password" id="password" required>
     <button type="submit">Se connecter</button>  
     <div>
-    <div>Pas encore de compte ? <a href="/register.php">Inscrivez-vous</div>  
+    <div>Pas encore de compte ? <a href="/register.php">Inscrivez-vous</div>
+    <?php  if (!empty($errors))  : ?>
+        <h2>Merci de corriger les erreurs suivantes.</h2>
+        <ul>
+           <?php foreach ($errors as $error) : ?>
+            <li><?= error ?></li>
+          <?php endforeach; ?>    
+        </ul>    
+    <?php endif; ?> 
 </body>
 </html>
 
