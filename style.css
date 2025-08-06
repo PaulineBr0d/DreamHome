@@ -179,3 +179,7 @@ ul.erreurs {
 ul.erreurs li {
     margin: 8px 0;
 }
+
+.form-alert{
+    color:red;
+}

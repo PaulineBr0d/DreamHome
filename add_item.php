@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $transactionType = isset($_POST['transaction-type']) ? trim($_POST['transaction-type']) : '';
     $description = isset($_POST['description']) ? trim($_POST['description']) : '';
 
-
+    //à faire image
     if ($title === '') $errors[] = "Le titre est obligatoire.";
     if (!in_array($propertyType, ['house', 'apartment'])) $errors[] = "Type de propriété invalide.";
     if (!is_numeric($price) || $price <= 0) $errors[] = "Le prix doit être un nombre positif.";
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $_SESSION['listings'][] = [
             'title' => htmlspecialchars($title),
             'property-type' => htmlspecialchars($propertyType),
-            'price' => (float)$price,
+            'price' => (int)$price,
             'location' => htmlspecialchars($location),
             'transaction' => htmlspecialchars($transactionType),
             'description' => htmlspecialchars($description),
@@ -59,12 +59,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <link rel="stylesheet" href="style.css">
 </head>
  <?php include '_header.php';?>
-    <body class="form-connect">
-    <main>
-    <form action="" method="post" enctype="multipart/form-data">
+    <body>
+    <main class="form-connect">
+    <form action="" method="post" enctype="multipart/form-data" id="form-add">
     <h4>Nouvel ajout d'un bien</h4>
     <label for="title">Titre</label>
     <input type="text" name="title" id="title" required>
+     <div  class="form-alert" id="isTitleValid"></div>
     <label for="property-type">Type :</label>
     <select id="property-type" name="property-type" required>
     <option value="">--Préciser le type de bien svp--</option>
@@ -75,8 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <input type="file" id="image" name="image" accept="image/png, image/jpeg" />
     <label for="price">Prix (en €)</label>
     <input type="number" name="price" id="price"  min="0" required>
+    <div  class="form-alert" id="isPriceValid"></div>
     <label for="location">Ville</label>
     <input type="text" name="location" id="location" required>
+    <div  class="form-alert" id="isLocationValid"></div>
     <select id="transaction-type" name="transaction-type" required>
     <option value="">--Préciser le type de transaction svp--</option>
     <option value="sale">Vente</option>
@@ -84,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     </select>
     <label for="description">Description</label>
     <textarea id="description" name="description" cols="30" rows="10" required></textarea>
+     <div  class="form-alert" id="isDescriptionValid"></div>
     <button type="submit">Ajouter</button></form>
     <?php 
         echo "<p>$message</p>";
@@ -91,5 +95,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <div>Retour à l'<a href="/">accueil</a></div>
     </main>
        <?php include '_footer.php';?>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['email'] = $email;
             $_SESSION['isLoggedIn'] = true;
 
-            header("Location: ????.php");
+            header("Location: login.php");
             exit;    
     }
 }
@@ -53,14 +53,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body class="form-connect">
      <?php include '_header.php';?>
      <main>
-    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+    <form action="" method="post" id="form-register">
     <h2>Inscription</h2>
     <label for="email">Email</label>
     <input type="email" name="email" id="email" required>
+    <div class="form-alert" id="isEmailValid"></div>
     <label for="password">Mot de passe</label>
     <input type="password" name="password" id="password" required>
+    <div  class="form-alert" id="isPassValid"></div>
     <label for="confirm-password">Confirmer le mot de passe</label>
     <input type="password" name="confirm-password" id="confirm-password" required>
+    <div class="form-alert" id="isPassSame"></div>
     <button type="submit">S'inscrire</button></form>   
     <div>Déjà inscrit ? <a href="/login.php">Connectez-vous</a></div>
      <?php  if (!empty($errors))  : ?>
@@ -73,5 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php endif; ?>  
      </main>
        <?php include '_footer.php';?>
+       <script src="script.js"></script>
 </body>
 </html>
