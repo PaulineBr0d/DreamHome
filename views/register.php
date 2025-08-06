@@ -50,8 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Créer un compte sur Find My Dream Home</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="form-connect">
-     <main>
+<body>
+     <main class="form-connect">
     <form action="" method="post" id="form-register">
     <h2>Inscription</h2>
     <label for="email">Email</label>
