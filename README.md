@@ -129,3 +129,103 @@ Chaque annonce doit contenir :
 - **Aucune sauvegarde réelle** pour le moment (pas d’écriture en base de données) :
     - Afficher simplement un message de confirmation après soumission.
 - Validation côté client & côté serveur
+
+# #4 Session
+
+### **Pages à modifier / créer**
+
+### **a) Initialisation de la session**
+
+- Activer l’utilisation des **sessions PHP** sur **toutes les pages** du site
+- Permettre ainsi de stocker et partager des informations sur l’utilisateur connecté entre les pages.
+
+---
+
+### **b) Page de connexion simulée**
+
+- Conserver la structure existante de la page de connexion.
+- Lorsqu’un utilisateur se connecte :
+    - Simuler la connexion en enregistrant dans la session les informations de l’utilisateur (par exemple, son email).
+    - Rediriger l’utilisateur vers la page d’accueil.
+
+---
+
+### **c) Page de déconnexion**
+
+- Créer une page permettant de **supprimer les données de session** pour déconnecter l’utilisateur.
+- Rediriger ensuite vers la page d’accueil.
+
+---
+
+### **d) Adaptation du header**
+
+- Si **l’utilisateur est connecté** :
+    - Afficher un message de bienvenue avec son nom ou email.
+    - Afficher un lien **“Déconnexion”**.
+    - Afficher le bouton **“Ajouter une annonce”**.
+- Si **l’utilisateur n’est pas connecté** :
+    - Afficher uniquement les liens **Login** et les catégories d’annonces.
+    - Masquer le bouton **“Ajouter une annonce”**.
+
+---
+
+### **3. Contraintes techniques**
+
+- La session doit être active sur toutes les pages.
+- La connexion est **uniquement simulée** (pas de vérification réelle en base de données).
+- L’accès à la page **Ajouter une annonce** doit être **réservé aux utilisateurs connectés** :
+    - Si un utilisateur non connecté tente d’y accéder, il doit être redirigé vers la page de connexion.
+
+# #5 BDD
+
+### **Pages à modifier / créer**
+
+[Structure TABLE](https://www.notion.so/Structure-TABLE-24757d7de0c0803caa69d11db8426735?pvs=21)
+
+### **a) Base de données**
+
+- Créer une base de données adaptée au projet.
+- Créer les tables suivantes :
+    - **user** : informations sur les utilisateurs (id, email, mot de passe, etc.).
+    - **propertyType** : types de biens (maison, appartement, etc.).
+    - **transactionType** : types de transaction (vente, location).
+    - **listing** : annonces avec relation vers les autres tables (utilisateur, type de bien, type de transaction).
+- Ajouter des données de test pour chaque table.
+
+---
+
+### **b) Connexion avec PDO**
+
+- Mettre en place une connexion à la base de données avec **PDO**.
+- Centraliser la connexion dans un fichier commun pour pouvoir la réutiliser sur toutes les pages.
+
+---
+
+### **c) Adaptation de l’affichage des annonces**
+
+- Modifier la page d’accueil pour **récupérer les annonces depuis la base de données** au lieu d’utiliser les tableaux PHP statiques.
+- Afficher les informations complètes d’une annonce en utilisant les relations entre les tables.
+
+---
+
+### **d) Page d’ajout d’annonce**
+
+- Adapter le formulaire pour **insérer la nouvelle annonce dans la base de données**.
+- Utiliser **PDO** pour exécuter la requête d’insertion.
+- Récupérer les valeurs possibles pour **propertyType** et **transactionType** depuis la base de données pour remplir les listes déroulantes.
+
+---
+
+### **e) Page de connexion**
+
+- Adapter la page de connexion pour **vérifier les identifiants** dans la table **user**. (Pas de hachage de mot de passe pour le moment)
+- Utiliser **PDO** pour effectuer la requête de sélection.
+
+---
+
+### **3. Contraintes techniques**
+
+- Toutes les interactions avec la base doivent passer par **PDO**.
+- Les requêtes doivent être préparées pour éviter les injections SQL.
+- Les pages doivent utiliser les données réelles issues de la base, plus de données codées en dur dans des tableaux PHP.
+- Les relations entre les tables doivent être exploitées pour récupérer les informations complètes (jointures).

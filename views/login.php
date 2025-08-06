@@ -1,16 +1,17 @@
 <?php
 session_start();
-if (!isset($_SESSION["isLoggedIn"]) && $_SESSION["isLoggedIn"] === true) {
-    header("Location: ../index.php"); 
+git 
+
+$pdo = new \PDO('mysql:host=localhost:3306;dbname=dream_home', 'totoro', 'miyazaki');
+
+// si connecté redirige vers add_item
+if (isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] === true) {
+    header('Location: add_item.php');
     exit();
 }
+$message ='';
 $errors = [];
 
-// pour test uniquement => utiliser password_hash()
-$utilisateur = [
-    'email' => 'toto@gmail.com',
-    'password' => 'Toto123!' 
-];
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -18,19 +19,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['password']);
 
     if (empty($email)) {
-        $errors[] = "L'email'est obligatoire.";
+        $errors[] = "L'email est obligatoire.";
     }  
     if (empty($password)) {
         $errors[] = "Le mot de passe est obligatoire.";
     } 
-
+    //requete pour l'utilisateur (id, email, password pour enregistrement session)
     if (empty($errors)) {
-            $_SESSION['email'] = $email;
+        $stmt = $pdo->prepare('SELECT * FROM user WHERE email = :email AND password = :password');
+        $stmt->bindValue(':email',$email, PDO::PARAM_STR);
+        $stmt->bindValue(':password',$password,PDO::PARAM_STR);
+        $stmt-> execute();
+        $user = $stmt->fetch();
+       
+        if ($user) {
+            $_SESSION['id'] = $user['id'];
+            $_SESSION['email'] = $user['email'];
             $_SESSION['isLoggedIn'] = true;
             header("Location: add_item.php");
             exit;
-        }    
+        } else {
+            $message = "Identifiants incorrects";
+        }
     }
+}
 
 ?>
 
@@ -54,6 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div  class="form-alert" id="isPassValid"></div>
     <button type="submit">Se connecter</button></form> 
     <div>Pas encore de compte ? <a href="register.php">Inscrivez-vous</a></div>
+    <div>Ou retournez à l'<a href="/">accueil</a></div>
     <?php  if (!empty($errors))  : ?>
         <h4>Merci de corriger les erreurs suivantes.</h4>
         <ul class="erreurs">
@@ -62,6 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <?php endforeach; ?>    
         </ul>    
     <?php endif; ?> 
+    <?php 
+        echo "<p>$message</p>";
+    ?>
        </main>
     <script src="../js/script.js"></script>
 </body>
