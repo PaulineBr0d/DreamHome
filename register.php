@@ -50,10 +50,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Créer un compte sur Find My Dream Home</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="form-connect">
+<body>
      <?php include '_header.php';?>
-     <main>
-    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+    <main class="form-connect">
+    <form action="/" method="post">
     <h2>Inscription</h2>
     <label for="email">Email</label>
     <input type="email" name="email" id="email" required>

@@ -52,8 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="style.css">
 </head>
  <?php include '_header.php';?>
-<body class="form-connect">
-    <main>
+ <body>
+    <main class="form-connect">
     <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
     <h4>Connexion</h4>
     <label for="email">Email</label>
