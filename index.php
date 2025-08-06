@@ -1,6 +1,5 @@
  <?php 
-   $listingsHouses = require_once "_listings_houses.php";
-   $listingsApartments = require_once "_listings_apartments.php";
+    $listings = require_once "views/components/_listings.php";
 ?>
 
 <!DOCTYPE html>
@@ -9,28 +8,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find My Dream Home</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <?php include '_header.php';?>
+    <?php include 'views/components/_header.php';?>
     <main>
         <h2>Nos annonces de maisons</h2>
         <section class="container">
-        <?php foreach ($listingsHouses as $item) 
-            {
-             include '_item.php';
-            }
-        ?>
+           <?php foreach ($listings as $item): ?>
+                <?php if ($item['property-type'] === 'house'): ?>
+                    <?php include 'views/components/_item.php'; ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </section>
         <h2>Nos annonces d’appartements</h2>
         <section class="container">
-         <?php foreach ($listingsApartments as $item)
-            {
-            include '_item.php';
-            }
-         ?>
+             <?php foreach ($listings as $item): ?>
+                <?php if ($item['property-type'] === 'apartment'): ?>
+                    <?php include 'views/components/_item.php'; ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        
         </section>
     </main>
-    <?php include '_footer.php';?>
+    <?php include 'views/components/_footer.php';?>
 </body>
 </html>
