@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+// si non connecté redirige vers index
+if (!isset($_SESSION["isLoggedIn"]) && $_SESSION["isLoggedIn"] === true) {
+    header("Location: ../index.php"); 
+    exit();
+}
 $errors = [];
 $message = '';
 $submitted = false;
