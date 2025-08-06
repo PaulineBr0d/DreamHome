@@ -56,9 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find My Dream Home</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
- <?php include '_header.php';?>
     <body>
     <main class="form-connect">
     <form action="" method="post" enctype="multipart/form-data" id="form-add">
@@ -94,7 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     ?>
     <div>Retour à l'<a href="/">accueil</a></div>
     </main>
-       <?php include '_footer.php';?>
-    <script src="script.js"></script>
+    <script src="../js/script.js"></script>
 </body>
 </html>

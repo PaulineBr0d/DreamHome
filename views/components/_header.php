@@ -3,7 +3,7 @@
     <nav  class="nav-links">
         <a href="#houses">House</a>
         <a href="#apartments">Apartments</a>
-        <a href="/add_item.php">Add</a>
-        <a href="/login.php">Login</a>
+        <a href="views/add_item.php">Add</a>
+        <a href="views/login.php">Login</a>
     </nav>
 </header>
