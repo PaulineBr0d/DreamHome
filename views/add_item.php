@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $imageType = $_FILES['image']["type"];
         $imageName = $_FILES['image']["name"];
 
-        $allowedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+        $allowedTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp',];
         $maxFileSize = 5 * 1024 * 1024;
         if (!in_array($imageType, $allowedTypes)) {
             echo "Type de fichier interdit";
@@ -41,10 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $imageExtension = end($imageExtension);
         $newImageName = uniqid('file_', true) . '.' . $imageExtension;
 
-        $dest = 'upload/' . $newImageName;
+        $dest = '../upload/' . $newImageName;
 
-        if (!is_dir('upload/')) {
-            mkdir('upload/', 0755, true);
+        if (!is_dir('../upload/')) {
+            mkdir('../upload/', 0755, true);
         }
        
      
