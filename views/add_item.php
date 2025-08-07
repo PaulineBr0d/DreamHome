@@ -15,9 +15,9 @@ if (!isset($_SESSION["isLoggedIn"])) {
     exit();
 }
 
-if (!isset($_SESSION['listings'])) {
+/*if (!isset($_SESSION['listings'])) {
     $_SESSION['listings'] = [];
-}
+}*/
 
 //validation des données
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
@@ -39,15 +39,20 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     if ($description === '') $errors[] = "La description est obligatoire.";
 
     if (empty($errors)) {
-        $_SESSION['listings'][] = [
-            'title' => htmlspecialchars($title),
-            'property-type' => htmlspecialchars($propertyType),
-            'price' => (int)$price,
-            'location' => htmlspecialchars($location),
-            'transaction' => htmlspecialchars($transactionType),
-            'description' => htmlspecialchars($description),
-        ];
-        
+    
+
+    $stmt = $pdo->prepare("INSERT INTO listing (title, property_type, price, city, transaction_type, `description`) 
+                               VALUES (:title, :property_type, :price, :city, :transaction_type, ':description')");
+       
+        $stmt->bindValue(':title',$title, PDO::PARAM_STR);
+        $stmt->bindValue(':property_type',$property_type,PDO::PARAM_STR);
+        $stmt->bindValue(':price',$price,PDO::PARAM_INT);
+        $stmt->bindValue(':city',$location,PDO::PARAM_STR);
+        $stmt->bindValue(':transaction_type',$transaction_type,PDO::PARAM_STR);
+        $stmt->bindValue(':description',$description,PDO::PARAM_STR); 
+     
+        $stmt->execute();*/ 
+       
         $message = "Le bien a été ajouté !";
     } else {
          foreach ($errors as $error) {
