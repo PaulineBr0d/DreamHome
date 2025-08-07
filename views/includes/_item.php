@@ -1,5 +1,5 @@
 <div class="item"> 
-    <img src="<?= htmlspecialchars($item['image'] ?? '') ?>" alt="Image de l'annonce">
+    <img src="<?= htmlspecialchars($item['image_url'] ?? '') ?>" alt="Image de l'annonce">
     <h3><?= htmlspecialchars($item['title']) ?></h3>
     <p><strong>Type de bien :</strong> <?= htmlspecialchars($item['property_type_name']) ?></p>
     <p><strong>Prix :</strong> <?= number_format($item['price'], 0, ',', ' ') ?> €</p>

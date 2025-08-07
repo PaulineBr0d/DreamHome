@@ -1,6 +1,6 @@
  <?php 
     session_start();
-    require_once 'views/config.php';
+    require_once 'views/includes/config.php';
 
         $stmt = $pdo->prepare('SELECT 
             lis.*, 
@@ -23,13 +23,18 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <?php include 'views/components/_header.php';?>
+    
+    <?php include 'views/includes/_header.php';
+    if (isset($_SESSION['error_message'])) {
+    echo "<p class='alert-error'>" . $_SESSION['error_message'] . "</p>";
+    unset($_SESSION['error_message']);
+    }?>
     <main>
         <h2>Nos annonces de maisons</h2>
         <section class="container">
            <?php foreach ($listings as $item): ?>
                 <?php if ($item['property_type_id'] == 1 ): ?>
-                    <?php include 'views/components/_item.php'; ?>
+                    <?php include 'views/includes/_item.php'; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
         </section>
@@ -37,12 +42,12 @@
         <section class="container">
              <?php foreach ($listings as $item): ?>
                 <?php if ($item['property_type_id']  == 2): ?>
-                    <?php include 'views/components/_item.php'; ?>
+                    <?php include 'views/includes/_item.php'; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
         
         </section>
     </main>
-    <?php include 'views/components/_footer.php';?>
+    <?php include 'views/includes/_footer.php';?>
 </body>
 </html>

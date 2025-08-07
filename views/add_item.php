@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once 'includes/config.php';
+require_once 'includes/auth.php';
 
-if (empty($_SESSION['isLoggedIn']) || $_SESSION['isLoggedIn'] !== true) {
-    header("Location: login.php");
-    exit();
-}
+isLoggedIn();
+requireLogin();
+requireRole(['agent', 'admin']);
 
 $user_id = $_SESSION['user_id'];
 
@@ -15,9 +15,46 @@ $transactionTypes = $pdo->query("SELECT id, name FROM transactionType")->fetchAl
 $errors = [];
 $message = '';
 $currentDate = date('Y-m-d H:i:s');
+$imagePath = null;
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
+    //récup' de l'image
+    if(isset($_FILES['image']) && ($_FILES['image']['error'] === 0)) {
+        $imageTmp = $_FILES['image']["tmp_name"];
+        $imageSize = $_FILES['image']["size"];
+        $imageType = $_FILES['image']["type"];
+        $imageName = $_FILES['image']["name"];
+
+        $allowedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+        $maxFileSize = 5 * 1024 * 1024;
+        if (!in_array($imageType, $allowedTypes)) {
+            echo "Type de fichier interdit";
+            exit;
+        }
+        if ($imageSize > $maxFileSize) {
+            echo "Taille de fichier trop volumineux";
+            exit;
+        }
+
+        $imageExtension = explode('.',$imageName);
+        $imageExtension = end($imageExtension);
+        $newImageName = uniqid('file_', true) . '.' . $imageExtension;
+
+        $dest = 'upload/' . $newImageName;
+
+        if (!is_dir('upload/')) {
+            mkdir('upload/', 0755, true);
+        }
+       
+     
+        if (move_uploaded_file($imageTmp, $dest)) {
+            $imagePath = $dest;
+        } else {
+            $errors[] = "Erreur lors du déplacement de l'image.";
+        }
+    }
+   
     $title = isset($_POST['title']) ? trim($_POST['title']) : '';
     $property_type = isset($_POST['property_type']) ? trim($_POST['property_type']) : '';
     $price = isset($_POST['price']) ? trim($_POST['price']) : '';
@@ -33,12 +70,18 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $errors[] = "La ville est obligatoire.";
     if ($description === '') 
     $errors[] = "La description est obligatoire.";
+    if (!in_array($property_type, array_column($propertyTypes, 'id'))) {
+        $errors[] = "Type de bien invalide.";
+    }
+    if (!in_array($transaction_type, array_column($transactionTypes, 'id'))) {
+        $errors[] = "Type de transaction invalide.";
+    }
 
     if (empty($errors)) {
         $stmt = $pdo->prepare( "INSERT INTO listing (
-            title, property_type_id, price, city, transaction_type_id, description, user_id, created_at, updated_at
+            title, property_type_id, price, city, transaction_type_id, description, image_url, user_id, created_at, updated_at
             ) VALUES (
-            :title, :property_type_id, :price, :city, :transaction_type_id, :description, :user_id, :created_at, :updated_at
+            :title, :property_type_id, :price, :city, :transaction_type_id, :description, :image_url, :user_id, :created_at, :updated_at
         )");
 
         $stmt->bindValue(':title', $title, PDO::PARAM_STR);
@@ -47,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $stmt->bindValue(':city', $location, PDO::PARAM_STR);
         $stmt->bindValue(':transaction_type_id', $transaction_type, PDO::PARAM_INT);
         $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+        $stmt->bindValue(':image_url', $imagePath, PDO::PARAM_STR);
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindValue(':created_at', $currentDate, PDO::PARAM_STR);
         $stmt->bindValue(':updated_at', $currentDate, PDO::PARAM_STR);
@@ -85,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <?php endforeach; ?>
 </select>
     <label for="image">Image</label>
-    <input type="file" id="image" name="image" accept="image/png, image/jpeg" />
+    <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg" />
     <label for="price">Prix (en €)</label>
     <input type="number" name="price" id="price"  min="0" required>
     <div  class="form-alert" id="isPriceValid"></div>

@@ -1,14 +1,14 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once 'includes/config.php';
+require_once 'includes/auth.php';
 
-if (isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] === true) {
-    header('Location: ../index.php');
-    exit();
-}
+
+isLoggedIn();
+
+
 $message ='';
 $errors = [];
-
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -32,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user) {
             $_SESSION['user_id'] = $user['ID'];
             $_SESSION['email'] = $user['email'];
+            $_SESSION['role'] = $user['role'];
             $_SESSION['isLoggedIn'] = true;
             header("Location:  ../index.php");
             exit;

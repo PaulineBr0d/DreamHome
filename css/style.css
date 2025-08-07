@@ -183,3 +183,12 @@ ul.erreurs li {
 .form-alert{
     color:red;
 }
+
+.alert-error {
+    color: red;
+    background-color: #ffe5e5;
+    padding: 10px;
+    border: 1px solid red;
+    border-radius: 5px;
+    margin: 15px 0;
+}
