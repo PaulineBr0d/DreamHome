@@ -3,9 +3,9 @@ session_start();
 
 $pdo = new \PDO('mysql:host=localhost:3306;dbname=dream_home', 'totoro', 'miyazaki');
 
-// si connecté redirige vers add_item
+// si connecté redirige vers ?
 if (isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] === true) {
-    header('Location: add_item.php');
+    header('Location: ../index.php');
     exit();
 }
 $message ='';
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['isLoggedIn'] = true;
-            header("Location: add_item.php");
+            header("Location:  ../index.php");
             exit;
         } else {
             $message = "Identifiants incorrects";

@@ -1,4 +1,5 @@
  <?php 
+     session_start();
     $listings = require_once "views/components/_listings.php";
 ?>
 
