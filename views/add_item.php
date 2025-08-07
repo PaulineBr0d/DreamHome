@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $stmt->bindValue(':transaction_type',$transaction_type,PDO::PARAM_STR);
         $stmt->bindValue(':description',$description,PDO::PARAM_STR); 
      
-        $stmt->execute();*/ 
+        $stmt->execute();
        
         $message = "Le bien a été ajouté !";
     } else {
