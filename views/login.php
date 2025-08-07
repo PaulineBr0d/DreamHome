@@ -1,9 +1,7 @@
 <?php
 session_start();
+require_once 'config.php';
 
-$pdo = new \PDO('mysql:host=localhost:3306;dbname=dream_home', 'totoro', 'miyazaki');
-
-// si connecté redirige vers ?
 if (isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] === true) {
     header('Location: ../index.php');
     exit();
@@ -23,16 +21,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($password)) {
         $errors[] = "Le mot de passe est obligatoire.";
     } 
-    //requete pour l'utilisateur (id, email, password pour enregistrement session)
+
     if (empty($errors)) {
         $stmt = $pdo->prepare('SELECT * FROM user WHERE email = :email AND password = :password');
         $stmt->bindValue(':email',$email, PDO::PARAM_STR);
         $stmt->bindValue(':password',$password,PDO::PARAM_STR);
         $stmt-> execute();
         $user = $stmt->fetch();
-       
+           
         if ($user) {
-            $_SESSION['id'] = $user['id'];
+            $_SESSION['user_id'] = $user['ID'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['isLoggedIn'] = true;
             header("Location:  ../index.php");
