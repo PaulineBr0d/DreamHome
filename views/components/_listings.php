@@ -1,6 +1,6 @@
 <?php
 // Liste des annonces
-$listings = [
+/*$listings = [
      [
         'image' => 'images/piscine.jpg',
         'title' => 'Maison avec piscine',
@@ -56,5 +56,5 @@ $listings = [
         'transaction-type' => 'Sale'
     ]
     ];
-     return $listings;
+     return $listings;*/
    ?> 

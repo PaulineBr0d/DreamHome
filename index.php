@@ -1,8 +1,18 @@
  <?php 
     session_start();
-    require_once 'config.php';
-    $listings = require_once "views/components/_listings.php";
-?>
+    require_once 'views/config.php';
+
+        $stmt = $pdo->prepare('SELECT 
+            l.*, 
+            pt.name AS property_type_name, 
+            tt.name AS transaction_type_name
+            FROM listing l
+            JOIN propertyType pt ON l.property_type_id = pt.id
+            JOIN transactionType tt ON l.transaction_type_id = tt.id');
+        $stmt->execute();
+        $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +28,7 @@
         <h2>Nos annonces de maisons</h2>
         <section class="container">
            <?php foreach ($listings as $item): ?>
-                <?php if ($item['property-type'] === 'house'): ?>
+                <?php if ($item['property_type_id'] == 1 ): ?>
                     <?php include 'views/components/_item.php'; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -26,7 +36,7 @@
         <h2>Nos annonces d’appartements</h2>
         <section class="container">
              <?php foreach ($listings as $item): ?>
-                <?php if ($item['property-type'] === 'apartment'): ?>
+                <?php if ($item['property_type_id']  == 2): ?>
                     <?php include 'views/components/_item.php'; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
