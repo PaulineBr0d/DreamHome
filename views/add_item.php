@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <input type="text" name="title" id="title" required>
      <div  class="form-alert" id="isTitleValid"></div>
     <label for="property-type">Type :</label>
-   <select id="property-type" name="property-type" required>
+   <select id="property-type" name="property_type" required>
     <option value="">--Préciser le type de bien svp--</option>
     <?php foreach ($propertyTypes as $type): ?>
         <option value="<?= htmlspecialchars($type['id']) ?>">
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <label for="location">Ville</label>
     <input type="text" name="location" id="location" required>
     <div  class="form-alert" id="isLocationValid"></div>
-    <select id="transaction-type" name="transaction-type" required>
+    <select id="transaction-type" name="transaction_type" required>
      <option value="">--Préciser le type de transaction--</option>
     <?php foreach ($transactionTypes as $type): ?>
         <option value="<?= htmlspecialchars($type['id']) ?>">
