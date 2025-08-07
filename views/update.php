@@ -32,36 +32,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imageType = $_FILES['image']['type'];
     $imageName = $_FILES['image']['name'];
 
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
     $maxFileSize = 5 * 1024 * 1024;
 
-    if (!in_array($imageType, $allowedTypes)) {
-        $errors[] = "Type de fichier non autorisé.";
-    } elseif ($imageSize > $maxFileSize) {
-        $errors[] = "Fichier trop volumineux.";
-    } else {
-      
+     if (!in_array($imageType, $allowedTypes)) {
+            echo "Type de fichier interdit";
+            exit;
+        }
+    if ($imageSize > $maxFileSize) {
+            echo "Taille de fichier trop volumineux";
+            exit;
+        }
+    
+        // Supprimer ancienne image 
+        if (!empty($listing['image_url'])) {
+            $oldPath = __DIR__ . '/../' . $listing['image_url'];
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
+            }
+        }
+
+        // Déplacer nouvelle image
         $extension = pathinfo($imageName, PATHINFO_EXTENSION);
-        $newFileName = uniqid('file_', true) . '.' . $extension;
-        $uploadDir =  __DIR__ . '/../upload/';
-        $dest = $uploadDir . $newFileName;
+        $newImgName = uniqid('img_', true) . '.' . $extension;
+        $dest = 'upload/' . $newImgName;
 
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
+        if (!is_dir('../upload/')) {
+            mkdir('../upload/', 0755, true);
         }
 
-        if (move_uploaded_file($imageTmp, $dest)) {
-            
-            if (!empty($listing['image_url']) && file_exists($listing['image_url'])) {
-                unlink($listing['image_url']);
-            }
-
-            $imagePath = 'upload/' . $newFileName;
+        if (move_uploaded_file($imageTmp, __DIR__ . '/../' . $dest)) {
+            $imagePath = $dest;
         } else {
-            $errors[] = "Erreur lors du téléchargement de l’image.";
-                }
-            }
+            $errors[] = "Erreur lors de l'envoi de l'image.";
         }
+    }
+
 
     $title = isset($_POST['title']) ? trim($_POST['title']) : '';
     $property_type = isset($_POST['property_type']) ? trim($_POST['property_type']) : '';
