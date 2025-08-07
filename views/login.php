@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body class="form-connect">
     <main>
-    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" id="form-login">
+    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="form-container" method="post" id="form-login">
     <h4>Connexion</h4>
     <label for="email">Email</label>
     <input type="email" name="email" id="email" required>

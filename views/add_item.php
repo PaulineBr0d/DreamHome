@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 </head>
     <body>
     <main class="form-connect">
-    <form action="" method="post" enctype="multipart/form-data" id="form-add">
+    <form action="" method="post" class="form-container" enctype="multipart/form-data" id="form-add">
     <h4>Nouvel ajout d'un bien</h4>
     <label for="title">Titre</label>
     <input type="text" name="title" id="title" required>

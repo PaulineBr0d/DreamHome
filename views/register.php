@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body class="form-connect">
      <main>
-    <form action="" method="post" id="form-register">
+    <form action="" method="post" class="form-container" id="form-register">
     <h2>Inscription</h2>
     <label for="email">Email</label>
     <input type="email" name="email" id="email" required>

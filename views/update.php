@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <main class="form-connect" >
 <?= $message ?>
-<form method="post" enctype="multipart/form-data">
+<form method="post" class="form-container" enctype="multipart/form-data">
     <h4>Modifier une annonce</h4>
     <?php if (!empty($listing['image_url'])): ?> 
     <img src="../<?= htmlspecialchars($listing['image_url']) ?>" alt="Image actuelle" style="max-width:300px;"><br>
