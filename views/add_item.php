@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $transaction_type = isset($_POST['transaction_type']) ? trim($_POST['transaction_type']) : '';
     $description = isset($_POST['description']) ? trim($_POST['description']) : '';
 
-    //Validation des données => vérif' des types de transaction et propriété ?
+    //Validation des données 
     if ($title === '') $errors[] = "Le titre est obligatoire.";
     if (!is_numeric($price) || $price <= 0) 
     $errors[] = "Le prix doit être un nombre positif.";
@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <?php endforeach; ?>
 </select>
     <label for="image">Image</label>
-    <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg" />
+    <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg, image/webp" />
     <label for="price">Prix (en €)</label>
     <input type="number" name="price" id="price"  min="0" required>
     <div  class="form-alert" id="isPriceValid"></div>

@@ -6,5 +6,7 @@
     <p><strong>Ville :</strong> <?= htmlspecialchars($item['city']) ?></p>
     <p><strong>Description :</strong> <?= htmlspecialchars($item['description']) ?></p>
     <p><strong>Type de transaction :</strong> <?= htmlspecialchars($item['transaction_type_name']) ?></p>
-    <a href="#" class="bouton-contact">Contact</a>
+    <a href="#" class="button-item">Contact</a>
+    <a href="views/update.php?id=<?= urlencode($item['ID']) ?>" class="button-item">Update</a>
+    <a href="#" class="button-item">Delete</a>
 </div>
