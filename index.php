@@ -3,12 +3,12 @@
     require_once 'views/config.php';
 
         $stmt = $pdo->prepare('SELECT 
-            l.*, 
-            pt.name AS property_type_name, 
-            tt.name AS transaction_type_name
-            FROM listing l
-            JOIN propertyType pt ON l.property_type_id = pt.id
-            JOIN transactionType tt ON l.transaction_type_id = tt.id');
+            lis.*, 
+            prt.name AS property_type_name, 
+            trt.name AS transaction_type_name
+            FROM listing lis
+            JOIN propertyType prt ON lis.property_type_id = prt.id
+            JOIN transactionType trt ON lis.transaction_type_id = trt.id');
         $stmt->execute();
         $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
         ?>

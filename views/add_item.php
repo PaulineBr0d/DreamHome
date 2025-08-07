@@ -25,7 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $transaction_type = isset($_POST['transaction_type']) ? trim($_POST['transaction_type']) : '';
     $description = isset($_POST['description']) ? trim($_POST['description']) : '';
 
-    // validations ici...
+    //Validation des données => vérif' des types de transaction et propriété ?
+    if ($title === '') $errors[] = "Le titre est obligatoire.";
+    if (!is_numeric($price) || $price <= 0) 
+    $errors[] = "Le prix doit être un nombre positif.";
+    if ($location === '') 
+    $errors[] = "La ville est obligatoire.";
+    if ($description === '') 
+    $errors[] = "La description est obligatoire.";
 
     if (empty($errors)) {
         $stmt = $pdo->prepare( "INSERT INTO listing (

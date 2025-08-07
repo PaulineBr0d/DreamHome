@@ -229,3 +229,62 @@ Chaque annonce doit contenir :
 - Les requêtes doivent être préparées pour éviter les injections SQL.
 - Les pages doivent utiliser les données réelles issues de la base, plus de données codées en dur dans des tableaux PHP.
 - Les relations entre les tables doivent être exploitées pour récupérer les informations complètes (jointures).
+
+# #6 Roles & CRUD & Favorite
+
+### **Modifications à apporter**
+
+### **a) Ajout du champ role dans la table user**
+
+- Ajouter une colonne role dans la table user.
+- Les rôles attendus :
+    - agent : peut publier, modifier, supprimer **ses propres annonces**.
+    - admin : peut publier, modifier, supprimer **toutes les annonces**.
+    - user (ou rôle par défaut) : ne peut **pas publier**, mais peut **ajouter des annonces en favoris**.
+
+---
+
+### **b) Accès à l’ajout d’annonce**
+
+- Restreindre l’accès à la page :
+    - Seuls les utilisateurs connectés ayant le rôle **agent ou admin** peuvent y accéder.
+    - Rediriger tout autre utilisateur vers la page d’accueil avec un message d’erreur.
+
+---
+
+### **c) Modification d’une annonce**
+
+- Créer une page permettant de modifier une annonce existante.
+- Seuls les utilisateurs suivants peuvent accéder à la modification :
+    - L’utilisateur **créateur** de l’annonce.
+    - Un utilisateur ayant le rôle **admin**.
+
+---
+
+### **d) Suppression d’une annonce**
+
+- Ajouter une option de suppression visible uniquement si :
+    - L’annonce appartient à l’utilisateur connecté.
+    - Ou que l’utilisateur a le rôle **admin**.
+- Empêcher toute tentative de suppression non autorisée côté serveur.
+
+---
+
+### **e) Favoris (accessible à tous les utilisateurs connectés)**
+
+- Ajouter une **fonctionnalité “Ajouter aux favoris”** sur chaque annonce visible.
+- Tous les utilisateurs **connectés**, quel que soit leur rôle (user, agent, admin), peuvent :
+    - Ajouter une annonce à leurs favoris.
+    - Retirer une annonce de leurs favoris.
+    - Visualiser une liste de leurs annonces favorites.
+- Créer une table favorite permettant de stocker la relation entre un utilisateur et une annonce.
+
+---
+
+### **3. Contraintes techniques**
+
+- Tous les contrôles d’autorisation (ajout, modification, suppression) doivent être **gérés côté serveur**.
+- Seuls les utilisateurs **connectés** peuvent interagir avec les annonces (ajout, modification, suppression, favoris).
+- Les pages doivent s’adapter dynamiquement :
+    - Afficher ou masquer les actions en fonction des droits de l’utilisateur connecté.
+- Prévoir un affichage personnalisé des favoris (ex : section “Mes favoris”).
