@@ -74,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php 
         echo "<p>$message</p>";
     ?>
+
        </main>
     <script src="../js/script.js"></script>
 </body>

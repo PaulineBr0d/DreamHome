@@ -1,5 +1,6 @@
  <?php 
     session_start();
+  
     require_once 'config.php';
   
         $stmt = $pdo->prepare('SELECT 
@@ -24,30 +25,30 @@
 </head>
 <body>
     
-    <?php include 'views/includes/_header.php';
-    if (isset($_SESSION['error_message'])) {
-    echo "<p class='alert-error'>" . $_SESSION['error_message'] . "</p>";
-    unset($_SESSION['error_message']);
-    }?>
-    <main>
-        <h2>Nos annonces de maisons</h2>
-        <section class="container">
-           <?php foreach ($listings as $item): ?>
-                <?php if ($item['property_type_id'] == 1 ): ?>
-                    <?php include 'views/includes/_item.php'; ?>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </section>
-        <h2>Nos annonces d’appartements</h2>
-        <section class="container">
-             <?php foreach ($listings as $item): ?>
-                <?php if ($item['property_type_id']  == 2): ?>
-                    <?php include 'views/includes/_item.php'; ?>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        
-        </section>
-    </main>
-    <?php include 'views/includes/_footer.php';?>
+<?php include 'views/includes/_header.php';
+if (isset($_SESSION['error_message'])) {
+echo "<p class='alert-error'>" . $_SESSION['error_message'] . "</p>";
+unset($_SESSION['error_message']);
+}?>
+<main>
+    <h2>Nos annonces de maisons</h2>
+    <section class="container">
+        <?php foreach ($listings as $item): ?>
+            <?php if ($item['property_type_id'] == 1 ): ?>
+                <?php include 'views/includes/_item.php'; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </section>
+    <h2>Nos annonces d’appartements</h2>
+    <section class="container">
+            <?php foreach ($listings as $item): ?>
+            <?php if ($item['property_type_id']  == 2): ?>
+                <?php include 'views/includes/_item.php'; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    
+    </section>
+</main>
+<?php include 'views/includes/_footer.php';?>
 </body>
 </html>

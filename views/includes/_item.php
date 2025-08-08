@@ -23,9 +23,10 @@ $confirmation = $isFavorite ? "Retirer des favoris ?" : "Ajouter aux favoris ?";
     <p><strong>Ville :</strong> <?= htmlspecialchars($item['city']) ?></p>
     <p><strong>Description :</strong> <?= htmlspecialchars($item['description']) ?></p>
     <p><strong>Type de transaction :</strong> <?= htmlspecialchars($item['transaction_type_name']) ?></p>
-    <div class="button">
+    
+        <div class="button">
    <?php  if (isset($_SESSION['user_id'])): ?>
-    <form action="views/favorite.php"  class="delete-form" method="POST" onsubmit="return confirm('<?= $confirmation ?>');">
+    <form action="/views/favorite.php"  class="delete-form" method="POST" onsubmit="return confirm('<?= $confirmation ?>');">
     <input type="hidden" name="id" value="<?= htmlspecialchars($item['ID']) ?>">
     <button type="submit" class="button-item"><?= $button_text ?></button>
     </form>
@@ -33,11 +34,12 @@ $confirmation = $isFavorite ? "Retirer des favoris ?" : "Ajouter aux favoris ?";
      <?php  if (isset($_SESSION['user_id'], $_SESSION['role']) &&
         ($item['user_id'] === $_SESSION['user_id'] || $_SESSION['role'] === 'admin')
         ): ?>
-    <a href="views/update.php?id=<?= urlencode($item['ID']) ?>" class="button-item">Modifier</a>
-    <form action="views/delete.php"  class="delete-form" method="POST" onsubmit="return confirm('Supprimer cette annonce ?');">
+    <a href="/views/update.php?id=<?= urlencode($item['ID']) ?>" class="button-item">Modifier</a>
+    <form action="/views/delete.php"  class="delete-form" method="POST" onsubmit="return confirm('Supprimer cette annonce ?');">
     <input type="hidden" name="id" value="<?= htmlspecialchars($item['ID']) ?>">
     <button type="submit" class="button-item-red">Supprimer</button>
     </form>
     <?php endif; ?>
     </div>
+    
 </div>

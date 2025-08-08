@@ -1,15 +1,13 @@
 <?php
 session_start();
+include '../config.php';
+include 'includes/auth.php';
 
 $errors = [];
-
+$message = '';
+$currentDate = date('Y-m-d H:i:s');
 $emailReg = "/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/";
 $pwdReg = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/";
-
-// pour test uniquement
-$utilisateur = [
-    'email' => 'toto@gmail.com',
-];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
@@ -31,12 +29,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($errors)) {
-          
-            $_SESSION['email'] = $email;
-            $_SESSION['isLoggedIn'] = true;
+        $stmt = $pdo->prepare( "INSERT INTO user (
+             email, password, created_at, updated_at 
+            ) VALUES (
+            :email, :password, :created_at, :updated_at
+        )");
 
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':password', $password, PDO::PARAM_STR);
+        $stmt->bindValue(':created_at', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':updated_at', $currentDate, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $message = "Votre compte a été créé !";
             header("Location: login.php");
             exit;    
+    } else {
+        {
+            $message .= "L'inscription a échoué";
+        }
     }
 }
 ?>
@@ -65,6 +76,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form-alert" id="isPassSame"></div>
     <button type="submit">S'inscrire</button></form>   
     <div>Déjà inscrit ? <a href="login.php">Connectez-vous</a></div>
+     <?php 
+        echo "<p>$message</p>";
+    ?>
      <?php  if (!empty($errors))  : ?>
         <h4>Merci de corriger les erreurs suivantes.</h4>
         <ul class="erreurs">

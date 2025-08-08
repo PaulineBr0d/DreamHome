@@ -1,7 +1,7 @@
 <?php
 session_start();
-include '../config.php';
-include 'includes/auth.php';
+require_once dirname(__DIR__) . '/config.php';
+require_once 'includes/auth.php';
 
 isLoggedIn();
 requireLogin();
@@ -18,91 +18,91 @@ $currentDate = date('Y-m-d H:i:s');
 $imagePath = null;
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
+    try {
+        //récup' de l'image
+        if (isset($_FILES['image']) && ($_FILES['image']['error'] === 0)) {
+            $imageTmp = $_FILES['image']["tmp_name"];
+            $imageSize = $_FILES['image']["size"];
+            $imageType = $_FILES['image']["type"];
+            $imageName = $_FILES['image']["name"];
 
-    //récup' de l'image
-    if(isset($_FILES['image']) && ($_FILES['image']['error'] === 0)) {
-        $imageTmp = $_FILES['image']["tmp_name"];
-        $imageSize = $_FILES['image']["size"];
-        $imageType = $_FILES['image']["type"];
-        $imageName = $_FILES['image']["name"];
+            $allowedTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
+            $maxFileSize = 5 * 1024 * 1024;
 
-        $allowedTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
-        $maxFileSize = 5 * 1024 * 1024;
-        if (!in_array($imageType, $allowedTypes)) {
-            echo "Type de fichier interdit";
-            exit;
+            if (!in_array($imageType, $allowedTypes)) {
+                throw new Exception("Type de fichier interdit");
+            }
+            if ($imageSize > $maxFileSize) {
+                throw new Exception("Taille de fichier trop volumineuse");
+            }
+
+            $extension = pathinfo($imageName, PATHINFO_EXTENSION);
+            $newImgName = uniqid('img_', true) . '.' . $extension;
+
+            $dest = UPLOAD_DIR . $newImgName; // 👈 Attention ici, tu renommes bien l'image au bon endroit
+
+            if (!is_dir(UPLOAD_DIR)) {
+                mkdir(UPLOAD_DIR, 0755, true);
+            }
+
+            if (move_uploaded_file($imageTmp, $dest)) {
+                $imagePath = UPLOAD_URL . $newImgName;
+            } else {
+                throw new Exception("Erreur lors du déplacement de l'image.");
+            }
         }
-        if ($imageSize > $maxFileSize) {
-            echo "Taille de fichier trop volumineux";
-            exit;
+
+        $title = isset($_POST['title']) ? trim($_POST['title']) : '';
+        $property_type = isset($_POST['property_type']) ? trim($_POST['property_type']) : '';
+        $price = isset($_POST['price']) ? trim($_POST['price']) : '';
+        $location = isset($_POST['location']) ? trim($_POST['location']) : '';
+        $transaction_type = isset($_POST['transaction_type']) ? trim($_POST['transaction_type']) : '';
+        $description = isset($_POST['description']) ? trim($_POST['description']) : '';
+
+        //Validation des données 
+        if ($title === '') $errors[] = "Le titre est obligatoire.";
+        if (!is_numeric($price) || $price <= 0) $errors[] = "Le prix doit être un nombre positif.";
+        if ($location === '') $errors[] = "La ville est obligatoire.";
+        if ($description === '') $errors[] = "La description est obligatoire.";
+        if (!in_array($property_type, array_column($propertyTypes, 'id'))) {
+            $errors[] = "Type de bien invalide.";
+        }
+        if (!in_array($transaction_type, array_column($transactionTypes, 'id'))) {
+            $errors[] = "Type de transaction invalide.";
         }
 
-        /*$imageExtension = explode('.',$imageName);
-        $imageExtension = end($imageExtension);*/
-        $extension = pathinfo($imageName, PATHINFO_EXTENSION);
-        $newImgName = uniqid('img_', true) . '.' . $extension;
+        if (empty($errors)) {
+            $stmt = $pdo->prepare( "INSERT INTO listing (
+                title, property_type_id, price, city, transaction_type_id, description, image_url, user_id, created_at, updated_at
+                ) VALUES (
+                :title, :property_type_id, :price, :city, :transaction_type_id, :description, :image_url, :user_id, :created_at, :updated_at
+            )");
 
-        $dest = UPLOAD_DIR . $imageName;
+            $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+            $stmt->bindValue(':property_type_id', $property_type, PDO::PARAM_INT);
+            $stmt->bindValue(':price', $price, PDO::PARAM_INT);
+            $stmt->bindValue(':city', $location, PDO::PARAM_STR);
+            $stmt->bindValue(':transaction_type_id', $transaction_type, PDO::PARAM_INT);
+            $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+            $stmt->bindValue(':image_url', $imagePath, PDO::PARAM_STR);
+            $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindValue(':created_at', $currentDate, PDO::PARAM_STR);
+            $stmt->bindValue(':updated_at', $currentDate, PDO::PARAM_STR);
+            $stmt->execute();
 
-        if (!is_dir(UPLOAD_DIR)) {
-        mkdir(UPLOAD_DIR, 0755, true);
-        }
-           
-        if (move_uploaded_file($imageTmp, $dest)) {
-            $imagePath = UPLOAD_URL . $newImgName;
+            $message = "<p style='color: green;'>Le bien a été ajouté !</p>";
         } else {
-            $errors[] = "Erreur lors du déplacement de l'image.";
+            foreach ($errors as $error) {
+                $message .= "<p style='color: red;'>$error</p>";
+            }
         }
-    }
-   
-    $title = isset($_POST['title']) ? trim($_POST['title']) : '';
-    $property_type = isset($_POST['property_type']) ? trim($_POST['property_type']) : '';
-    $price = isset($_POST['price']) ? trim($_POST['price']) : '';
-    $location = isset($_POST['location']) ? trim($_POST['location']) : '';
-    $transaction_type = isset($_POST['transaction_type']) ? trim($_POST['transaction_type']) : '';
-    $description = isset($_POST['description']) ? trim($_POST['description']) : '';
 
-    //Validation des données 
-    if ($title === '') $errors[] = "Le titre est obligatoire.";
-    if (!is_numeric($price) || $price <= 0) 
-    $errors[] = "Le prix doit être un nombre positif.";
-    if ($location === '') 
-    $errors[] = "La ville est obligatoire.";
-    if ($description === '') 
-    $errors[] = "La description est obligatoire.";
-    if (!in_array($property_type, array_column($propertyTypes, 'id'))) {
-        $errors[] = "Type de bien invalide.";
-    }
-    if (!in_array($transaction_type, array_column($transactionTypes, 'id'))) {
-        $errors[] = "Type de transaction invalide.";
-    }
-
-    if (empty($errors)) {
-        $stmt = $pdo->prepare( "INSERT INTO listing (
-            title, property_type_id, price, city, transaction_type_id, description, image_url, user_id, created_at, updated_at
-            ) VALUES (
-            :title, :property_type_id, :price, :city, :transaction_type_id, :description, :image_url, :user_id, :created_at, :updated_at
-        )");
-
-        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
-        $stmt->bindValue(':property_type_id', $property_type, PDO::PARAM_INT);
-        $stmt->bindValue(':price', $price, PDO::PARAM_INT);
-        $stmt->bindValue(':city', $location, PDO::PARAM_STR);
-        $stmt->bindValue(':transaction_type_id', $transaction_type, PDO::PARAM_INT);
-        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
-        $stmt->bindValue(':image_url', $imagePath, PDO::PARAM_STR);
-        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
-        $stmt->bindValue(':created_at', $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(':updated_at', $currentDate, PDO::PARAM_STR);
-        $stmt->execute();
-
-        $message = "Le bien a été ajouté !";
-    } else {
-        foreach ($errors as $error) {
-            $message .= "<p style='color: red;'>$error</p>";
-        }
+    } catch (Exception $e) {
+        // Gestion des exceptions (image ou base de données)
+        $message = "<p style='color: red;'>Erreur : " . htmlspecialchars($e->getMessage()) . "</p>";
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

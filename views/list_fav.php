@@ -3,7 +3,7 @@ session_start();
 require_once dirname(__DIR__) . '/config.php';
 require_once 'includes/auth.php';
 isLoggedIn();
-
+//revoir gestion des redirections avec base
 // Visualisation de la liste des favoris
 $listing_id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
 $user_id = $_SESSION['user_id'] ?? null;
@@ -29,7 +29,8 @@ $listing_favs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <?php include 'includes/_header.php';?>
+   
+<?php include 'includes/_header.php';?>
       <main>
         <h2>Ma liste des favoris</h2>
          <section class="container">
@@ -37,7 +38,8 @@ $listing_favs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php include 'includes/_item.php'; ?>
           <?php endforeach; ?>   
         </section>
+           <div>Retour à l'<a href="/">accueil</a></div>
         </main>
-    <?php include 'includes/_footer.php';?>
+        <?php include 'includes/_footer.php';?>
 </body>
 </html>

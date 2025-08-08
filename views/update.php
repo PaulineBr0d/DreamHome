@@ -55,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Déplacer nouvelle image
         $extension = pathinfo($imageName, PATHINFO_EXTENSION);
         $newImgName = uniqid('img_', true) . '.' . $extension;
-        //$dest = 'upload/' . $newImgName;
         
 
         if (!is_dir(UPLOAD_DIR)) {
@@ -71,48 +70,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-
-    $title = isset($_POST['title']) ? trim($_POST['title']) : '';
-    $property_type = isset($_POST['property_type']) ? trim($_POST['property_type']) : '';
-    $price = isset($_POST['price']) ? trim($_POST['price']) : '';
-    $location = isset($_POST['location']) ? trim($_POST['location']) : '';
-    $transaction_type = isset($_POST['transaction_type']) ? trim($_POST['transaction_type']) : '';
-    $description = isset($_POST['description']) ? trim($_POST['description']) : '';
+    $new_data = [
+        'title' => isset($_POST['title']) ? trim($_POST['title']) : '',
+        'property_type_id' => isset($_POST['property_type']) ? trim($_POST['property_type']) : '',
+        'price' => isset($_POST['price']) ? trim($_POST['price']) : '',
+        'city' => isset($_POST['location']) ? trim($_POST['location']) : '',
+        'transaction_type_id' => isset($_POST['transaction_type']) ? trim($_POST['transaction_type']) : '',
+        'description' => isset($_POST['description']) ? trim($_POST['description']) : '',
+    ];
 
     //Validation des données 
-    if ($title === '') $errors[] = "Le titre est obligatoire.";
-    if (!is_numeric($price) || $price <= 0) 
-    $errors[] = "Le prix doit être un nombre positif.";
-    if ($location === '') 
-    $errors[] = "La ville est obligatoire.";
-    if ($description === '') 
-    $errors[] = "La description est obligatoire.";
-    if (!in_array($property_type, array_column($propertyTypes, 'id'))) {
+    if ($new_data['title'] === '') $errors[] = "Le titre est obligatoire.";
+    if (!is_numeric($new_data['price']) || $new_data['price'] <= 0) $errors[] = "Le prix doit être un nombre positif.";
+    if ($new_data['city'] === '') $errors[] = "La ville est obligatoire.";
+    if ($new_data['description'] === '') $errors[] = "La description est obligatoire.";
+    if (!in_array($new_data['property_type_id'], array_column($propertyTypes, 'id'))) {
         $errors[] = "Type de bien invalide.";
     }
-    if (!in_array($transaction_type, array_column($transactionTypes, 'id'))) {
+    if (!in_array($new_data['transaction_type_id'], array_column($transactionTypes, 'id'))) {
         $errors[] = "Type de transaction invalide.";
     }
-
+    
 
     if (empty($errors)) {
-      
-        $stmt = $pdo->prepare("
-            UPDATE listing
-            SET title = :title, property_type_id = :property_type_id, price = :price, city = :city, transaction_type_id = :transaction_type_id, description = :description,  image_url = :image_url, updated_at = NOW()
-            WHERE id = :id
-        ");
-        $stmt->execute([
-            'title' => $title,
-            ':property_type_id'=> $property_type,
-            'price' => $price,
-            'city' => $location,
-            ':transaction_type_id'=> $transaction_type,
-            'description' => $description,
-            'image_url' => $imagePath,
-            'id' => $listing_id 
-        ]);
+        //Test des données
+        $fields_to_update = [];
+        $params = [];
+
+        foreach ($new_data as $field => $new_value) {
+            $old_value = isset($listing[$field]) ? $listing[$field] : null;
+
+            if ($new_value !== $old_value) {
+                $fields_to_update[] = "$field = :$field";
+                $params[$field] = $new_value;
+            }
+    } 
+    
+    $params['id'] = $listing['ID']; 
+    $sql = "UPDATE listing SET " . implode(', ', $fields_to_update) . " WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    if ($stmt->execute($params)) {
         $message = "Annonce mise à jour avec succès.";
+        } else {
+             $message = "Erreur lors de la mise à jour.";
+        }
     } else {
         foreach ($errors as $error) {
             $message .= "<p style='color:red;'>$error</p>";
