@@ -7,6 +7,7 @@
         <?php if (isset($_SESSION['isLoggedIn'])): ?>
             <a href="views/add_item.php">Add</a>
             <a href="views/logout.php">Logout</a>
+            <a href="views/list_fav.php">Favoris</a>
         <?php else: ?>
             <a href="views/login.php">Login</a>
         <?php endif; ?>

@@ -288,3 +288,82 @@ Chaque annonce doit contenir :
 - Les pages doivent s’adapter dynamiquement :
     - Afficher ou masquer les actions en fonction des droits de l’utilisateur connecté.
 - Prévoir un affichage personnalisé des favoris (ex : section “Mes favoris”).
+
+# #7 - Paginate
+
+### **Pages à créer**
+
+### **a) Page house**
+
+- Afficher uniquement les annonces dont le type de bien est “Maison”.
+- Afficher **12 annonces maximum par page**.
+- Afficher en bas de la liste :
+    - Les liens pour naviguer vers les **pages suivantes / précédentes**.
+    - Le numéro de page actif.
+
+---
+
+### **b) Page appartment**
+
+- Afficher uniquement les annonces dont le type de bien est “Appartement”.
+- Appliquer exactement le **même système de pagination** que sur la page house.
+
+---
+
+### **Fonctionnement attendu**
+
+- Utiliser un paramètre en **GET** (?page=1, ?page=2, etc.) pour déterminer quelle portion des annonces afficher.
+- La page doit :
+    - Calculer le **nombre total d’annonces** correspondant au type sélectionné.
+    - Déterminer le **nombre total de pages**.
+    - Récupérer uniquement les **annonces de la page en cours**.
+- Ne pas afficher de lien vers une page inexistante (ex : page 6 si seulement 3 pages).
+
+---
+
+### **3. Contraintes techniques**
+
+- Les annonces doivent être récupérées depuis la base de données via **PDO**.
+- La requête SQL doit utiliser **LIMIT** et **OFFSET** en fonction de la page en cours.
+- Tous les contrôles doivent être faits côté serveur :
+    - Si aucun paramètre page n’est passé → afficher la **page 1 par défaut**.
+    - Si un numéro de page incorrect est passé → rediriger vers la page 1.
+- Le lien actif (page en cours) doit être **clairement visible** dans la pagination.
+
+# #8 - Search Filter
+
+### Pages à créer
+
+### **a) Page de recherche**
+
+- Ajouter un **formulaire de recherche** au-dessus de la liste des annonces.
+- Ce formulaire doit permettre de saisir ou sélectionner les champs suivants :
+    - **Ville** (champ texte)
+    - **Prix maximum** (champ numérique)
+    - **Type de bien** (liste déroulante alimentée depuis la base de données)
+    - **Type de transaction** (liste déroulante alimentée depuis la base de données)
+- Le formulaire doit envoyer les données en **méthode GET** pour afficher les résultats sur la même page.
+
+---
+
+### **b) Adaptation du header**
+
+- Ajouter un lien vers la page de recherche search.php dans la **barre de navigation** du site.
+
+---
+
+### **Fonctionnement attendu**
+
+- Lorsqu’un utilisateur valide le formulaire :
+    - La liste des annonces est **filtrée dynamiquement** selon les critères remplis.
+    - Il est possible de combiner **un ou plusieurs** critères.
+    - Les filtres doivent rester visibles avec les valeurs sélectionnées après soumission.
+
+---
+
+### **3. Contraintes techniques**
+
+- Le filtrage doit se faire **au niveau de la requête SQL** (via PDO), en fonction des valeurs reçues en GET.
+- Si aucun filtre n’est appliqué, **toutes les annonces** doivent être affichées par défaut.
+- Les filtres doivent être **compatibles entre eux** (ex : ville + type de bien + prix).
+- Utiliser des **requêtes préparées** pour éviter toute injection SQL.

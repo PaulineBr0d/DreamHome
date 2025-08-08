@@ -1,7 +1,7 @@
  <?php 
     session_start();
-    require_once 'views/includes/config.php';
-
+    require_once 'config.php';
+  
         $stmt = $pdo->prepare('SELECT 
             lis.*, 
             prt.name AS property_type_name, 

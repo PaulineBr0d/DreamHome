@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once 'includes/config.php';
-require_once 'includes/auth.php';
+include '../config.php';
+include 'includes/auth.php';
 
 isLoggedIn();
 requireLogin();
@@ -42,15 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $extension = pathinfo($imageName, PATHINFO_EXTENSION);
         $newImgName = uniqid('img_', true) . '.' . $extension;
 
-        $dest = '../upload/' . $newImgName;
+        $dest = UPLOAD_DIR . $imageName;
 
-        if (!is_dir('../upload/')) {
-            mkdir('../upload/', 0755, true);
+        if (!is_dir(UPLOAD_DIR)) {
+        mkdir(UPLOAD_DIR, 0755, true);
         }
-       
-     
+           
         if (move_uploaded_file($imageTmp, $dest)) {
-            $imagePath = $dest;
+            $imagePath = UPLOAD_URL . $newImgName;
         } else {
             $errors[] = "Erreur lors du déplacement de l'image.";
         }

@@ -11,4 +11,7 @@ try {
     die("Connexion échouée : " . $e->getMessage());
 }
 
+define('UPLOAD_DIR', __DIR__ . '/upload/'); // pour les opérations sur fichiers
+define('UPLOAD_URL', '/upload/');              // pour les URLs côté HTML
+
 ?>

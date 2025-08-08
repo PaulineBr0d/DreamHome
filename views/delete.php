@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '../includes/config.php';
-require_once __DIR__ . '../includes/auth.php';
+include '../config.php';
+include 'includes/auth.php';
 
 isLoggedIn();
 requireLogin();
@@ -25,10 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Suppression de l'image si elle existe
-    if (!empty($listing['image_url']) && file_exists(__DIR__ . '/../' . $listing['image_url'])) {
-        unlink(__DIR__ . '/../' . $listing['image_url']);
+    if (!empty($listing['image_url'])) {
+        $filePath = UPLOAD_DIR . basename($listing['image_url']); 
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
     }
-
     // Suppression de l'annonce
     $stmt = $pdo->prepare("DELETE FROM listing WHERE id = :id");
     $stmt->execute([':id' => $listing_id]);

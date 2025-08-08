@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once 'includes/config.php';
-require_once 'includes/auth.php';
+include '../config.php';
+include 'includes/auth.php';
 
 isLoggedIn();
 requireLogin();
@@ -55,14 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Déplacer nouvelle image
         $extension = pathinfo($imageName, PATHINFO_EXTENSION);
         $newImgName = uniqid('img_', true) . '.' . $extension;
-        $dest = 'upload/' . $newImgName;
+        //$dest = 'upload/' . $newImgName;
+        
 
-        if (!is_dir('../upload/')) {
-            mkdir('../upload/', 0755, true);
+        if (!is_dir(UPLOAD_DIR)) {
+            mkdir(UPLOAD_DIR, 0755, true);
         }
 
-        if (move_uploaded_file($imageTmp, __DIR__ . '/../' . $dest)) {
-            $imagePath = $dest;
+        $dest = UPLOAD_DIR . $newImgName;
+
+        if (move_uploaded_file($imageTmp, $dest))  {
+            $imagePath = UPLOAD_URL . $newImgName;
         } else {
             $errors[] = "Erreur lors de l'envoi de l'image.";
         }
